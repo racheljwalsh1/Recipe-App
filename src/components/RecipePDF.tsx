@@ -14,6 +14,8 @@ type Recipe = {
   imageUrl: string | null
   ingredients: Ingredient[]
   instructions: string[]
+  notes: string | null
+  tags: string[]
 }
 
 export default function RecipePDFButton({ recipe }: { recipe: Recipe }) {

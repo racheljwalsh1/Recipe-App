@@ -20,6 +20,9 @@ model Recipe {
   imageUrl     String?
   author       String?
   notes        String?
+  rhysRating   Int?
+  rachelRating Int?
+  tags         String[] @default([])
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

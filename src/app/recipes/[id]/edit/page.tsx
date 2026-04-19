@@ -15,10 +15,10 @@ export default async function EditRecipePage(props: PageProps<"/recipes/[id]/edi
 
   return (
     <div className="max-w-2xl mx-auto">
-      <Link href={`/recipes/${id}`} className="text-sm text-amber-600 hover:text-amber-800">
+      <Link href={`/recipes/${id}`} className="text-sm text-yellow-600 hover:text-yellow-800">
         ← Back to recipe
       </Link>
-      <h1 className="mt-4 mb-8 text-3xl font-bold text-amber-900">Edit Recipe</h1>
+      <h1 className="mt-4 mb-8 text-3xl font-bold text-yellow-900">Edit Recipe</h1>
       <RecipeForm
         action={updateRecipe.bind(null, id)}
         initialData={{
@@ -33,6 +33,8 @@ export default async function EditRecipePage(props: PageProps<"/recipes/[id]/edi
           notes: recipe.notes,
           ingredients,
           instructions,
+          rhysRating: recipe.rhysRating,
+          rachelRating: recipe.rachelRating,
         }}
         submitLabel="Save Changes"
       />

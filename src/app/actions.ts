@@ -33,6 +33,23 @@ export type Ingredient = {
 
 function pf(list: string[], i: number) { return parseFloat(list[i] ?? "") }
 
+function computeTags(ingredients: Ingredient[], servings: number): string[] {
+  const tracked = ingredients.filter(
+    (ing) => typeof ing.grams === "number" && ing.grams > 0 && typeof ing.calories === "number"
+  )
+  if (tracked.length === 0) return []
+  let totalCalories = 0, totalProtein = 0
+  for (const ing of tracked) {
+    const f = (ing.grams as number) / 100
+    totalCalories += (ing.calories ?? 0) * f
+    totalProtein  += (ing.protein  ?? 0) * f
+  }
+  const tags: string[] = []
+  if (totalCalories > 0 && totalCalories / servings < 350) tags.push("Low Calorie")
+  if (totalProtein  > 0 && totalProtein  / servings > 20)  tags.push("High Protein")
+  return tags
+}
+
 function parseIngredients(formData: FormData): Ingredient[] {
   const names        = formData.getAll("ingredientName") as string[]
   const amounts      = formData.getAll("ingredientAmount") as string[]
@@ -92,6 +109,10 @@ export async function createRecipe(formData: FormData) {
   const cookTime = parseInt(formData.get("cookTime") as string) || 0
   const category = formData.get("category") as string
   const author = formData.get("author") as string
+  const rhysRatingRaw = parseInt(formData.get("rhysRating") as string)
+  const rachelRatingRaw = parseInt(formData.get("rachelRating") as string)
+  const rhysRating = rhysRatingRaw >= 1 && rhysRatingRaw <= 5 ? rhysRatingRaw : null
+  const rachelRating = rachelRatingRaw >= 1 && rachelRatingRaw <= 5 ? rachelRatingRaw : null
 
   const ingredients = parseIngredients(formData)
   const instructions = (formData.getAll("instruction") as string[]).filter((s) => s.trim())
@@ -102,10 +123,13 @@ export async function createRecipe(formData: FormData) {
   if (imageFile && imageFile.size > 0) {
     const blob = await put(imageFile.name, imageFile, {
       access: "public",
+      addRandomSuffix: true,
       token: process.env.RECIPEBLOB_READ_WRITE_TOKEN,
     })
     imageUrl = blob.url
   }
+
+  const tags = computeTags(ingredients, servings)
 
   const recipe = await prisma.recipe.create({
     data: {
@@ -117,6 +141,9 @@ export async function createRecipe(formData: FormData) {
       category: category || null,
       author: author || null,
       notes,
+      rhysRating,
+      rachelRating,
+      tags,
       ingredients: JSON.stringify(ingredients),
       instructions: JSON.stringify(instructions),
       imageUrl,
@@ -135,6 +162,10 @@ export async function updateRecipe(id: string, formData: FormData) {
   const cookTime = parseInt(formData.get("cookTime") as string) || 0
   const category = formData.get("category") as string
   const author = formData.get("author") as string
+  const rhysRatingRaw = parseInt(formData.get("rhysRating") as string)
+  const rachelRatingRaw = parseInt(formData.get("rachelRating") as string)
+  const rhysRating = rhysRatingRaw >= 1 && rhysRatingRaw <= 5 ? rhysRatingRaw : null
+  const rachelRating = rachelRatingRaw >= 1 && rachelRatingRaw <= 5 ? rachelRatingRaw : null
 
   const ingredients = parseIngredients(formData)
   const instructions = (formData.getAll("instruction") as string[]).filter((s) => s.trim())
@@ -145,10 +176,13 @@ export async function updateRecipe(id: string, formData: FormData) {
   if (imageFile && imageFile.size > 0) {
     const blob = await put(imageFile.name, imageFile, {
       access: "public",
+      addRandomSuffix: true,
       token: process.env.RECIPEBLOB_READ_WRITE_TOKEN,
     })
     imageUrl = blob.url
   }
+
+  const tags = computeTags(ingredients, servings)
 
   await prisma.recipe.update({
     where: { id },
@@ -161,6 +195,9 @@ export async function updateRecipe(id: string, formData: FormData) {
       category: category || null,
       author: author || null,
       notes,
+      rhysRating,
+      rachelRating,
+      tags,
       ingredients: JSON.stringify(ingredients),
       instructions: JSON.stringify(instructions),
       imageUrl,

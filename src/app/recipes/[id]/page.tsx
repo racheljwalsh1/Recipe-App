@@ -78,25 +78,55 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
     <div className="max-w-2xl mx-auto">
       <div className="mb-6 flex items-start justify-between gap-4">
         <div>
-          <Link href="/" className="text-sm text-amber-600 hover:text-amber-800">
+          <Link href="/" className="text-sm text-yellow-600 hover:text-yellow-800">
             ← All Recipes
           </Link>
-          <h1 className="mt-2 text-3xl font-bold text-amber-900">{recipe.title}</h1>
+          <h1 className="mt-2 text-3xl font-bold text-yellow-900">{recipe.title}</h1>
           <div className="mt-1 flex flex-wrap items-center gap-2">
             {recipe.category && (
-              <span className="inline-block rounded-full bg-amber-100 px-3 py-0.5 text-xs font-medium text-amber-800">
+              <span className="inline-block rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-medium text-yellow-800">
                 {recipe.category}
               </span>
             )}
+            {recipe.tags.includes("High Protein") && (
+              <span className="inline-block rounded-full bg-blue-100 px-3 py-0.5 text-xs font-medium text-blue-800">
+                High Protein
+              </span>
+            )}
+            {recipe.tags.includes("Low Calorie") && (
+              <span className="inline-block rounded-full bg-green-100 px-3 py-0.5 text-xs font-medium text-green-800">
+                Low Calorie
+              </span>
+            )}
             {recipe.author && (
-              <span className="text-xs text-amber-700/70">Made by {recipe.author}</span>
+              <span className="text-xs text-yellow-700/70">Written by {recipe.author}</span>
             )}
           </div>
+          {(recipe.rhysRating || recipe.rachelRating) && (
+            <div className="mt-2 flex flex-wrap gap-4">
+              {recipe.rhysRating && (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-medium text-yellow-700">Rhys</span>
+                  <span className="text-base leading-none">
+                    {"⭐".repeat(recipe.rhysRating)}{"☆".repeat(5 - recipe.rhysRating)}
+                  </span>
+                </div>
+              )}
+              {recipe.rachelRating && (
+                <div className="flex items-center gap-1.5">
+                  <span className="text-xs font-medium text-yellow-700">Rachel</span>
+                  <span className="text-base leading-none">
+                    {"🍿".repeat(recipe.rachelRating)}{"○".repeat(5 - recipe.rachelRating)}
+                  </span>
+                </div>
+              )}
+            </div>
+          )}
         </div>
         <div className="flex shrink-0 gap-2">
           <Link
             href={`/recipes/${recipe.id}/edit`}
-            className="rounded-full border border-amber-200 bg-white px-4 py-2.5 text-sm font-medium text-amber-700 hover:bg-amber-50 transition-colors"
+            className="rounded-full border border-yellow-200 bg-white px-4 py-2.5 text-sm font-medium text-yellow-700 hover:bg-yellow-50 transition-colors"
           >
             Edit
           </Link>
@@ -111,6 +141,8 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
               imageUrl: recipe.imageUrl,
               ingredients,
               instructions,
+              notes: recipe.notes,
+              tags: recipe.tags,
             }}
           />
           <DeleteRecipeButton id={recipe.id} />
@@ -131,42 +163,42 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
       )}
 
       {recipe.description && (
-        <p className="mb-6 text-amber-800/70 leading-relaxed">{recipe.description}</p>
+        <p className="mb-6 text-yellow-800/70 leading-relaxed">{recipe.description}</p>
       )}
 
       <div className="mb-8 space-y-3">
         {/* Key stat cards */}
         <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-2xl border border-amber-200 bg-white px-4 py-4 text-center shadow-sm">
-            <div className="text-3xl font-bold text-amber-900">{recipe.servings}</div>
-            <div className="mt-1 text-xs font-medium uppercase tracking-wide text-amber-400">Servings</div>
+          <div className="rounded-2xl border border-yellow-200 bg-white px-4 py-4 text-center shadow-sm">
+            <div className="text-3xl font-bold text-yellow-900">{recipe.servings}</div>
+            <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Servings</div>
           </div>
           {perServing.calories > 0 ? (
-            <div className="rounded-2xl border border-amber-200 bg-white px-4 py-4 text-center shadow-sm">
-              <div className="text-3xl font-bold text-amber-900">{perServing.calories}</div>
-              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-amber-400">Cal / Serving</div>
+            <div className="rounded-2xl border border-yellow-200 bg-white px-4 py-4 text-center shadow-sm">
+              <div className="text-3xl font-bold text-yellow-900">{perServing.calories}</div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Cal / Serving</div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-amber-200 bg-amber-50/50 px-4 py-4 text-center">
-              <div className="text-sm text-amber-300">—</div>
-              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-amber-300">Cal / Serving</div>
+            <div className="rounded-2xl border border-dashed border-yellow-200 bg-yellow-50/50 px-4 py-4 text-center">
+              <div className="text-sm text-yellow-300">—</div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-300">Cal / Serving</div>
             </div>
           )}
           {perServing.protein > 0 ? (
-            <div className="rounded-2xl border border-amber-200 bg-white px-4 py-4 text-center shadow-sm">
-              <div className="text-3xl font-bold text-amber-900">{perServing.protein}<span className="text-lg font-normal text-amber-400">g</span></div>
-              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-amber-400">Protein / Serving</div>
+            <div className="rounded-2xl border border-yellow-200 bg-white px-4 py-4 text-center shadow-sm">
+              <div className="text-3xl font-bold text-yellow-900">{perServing.protein}<span className="text-lg font-normal text-yellow-400">g</span></div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Protein / Serving</div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-amber-200 bg-amber-50/50 px-4 py-4 text-center">
-              <div className="text-sm text-amber-300">—</div>
-              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-amber-300">Protein / Serving</div>
+            <div className="rounded-2xl border border-dashed border-yellow-200 bg-yellow-50/50 px-4 py-4 text-center">
+              <div className="text-sm text-yellow-300">—</div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-300">Protein / Serving</div>
             </div>
           )}
         </div>
         {/* Time info */}
         {totalTime > 0 && (
-          <div className="flex gap-6 rounded-2xl bg-amber-50 px-6 py-3 text-sm text-amber-800">
+          <div className="flex gap-6 rounded-2xl bg-yellow-50 px-6 py-3 text-sm text-yellow-800">
             {recipe.prepTime > 0 && (
               <div><span className="font-semibold">Prep</span> {recipe.prepTime} min</div>
             )}
@@ -180,14 +212,14 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
       {ingredients.length > 0 && (
         <section className="mb-8">
-          <h2 className="mb-3 text-xl font-semibold text-amber-900">Ingredients</h2>
-          <ul className="space-y-2 rounded-2xl border border-amber-100 bg-white p-5">
+          <h2 className="mb-3 text-xl font-semibold text-yellow-900">Ingredients</h2>
+          <ul className="space-y-2 rounded-2xl border border-yellow-100 bg-white p-5">
             {ingredients.map((ing, i) => (
               <li key={i} className="flex gap-3 text-sm">
-                <span className="w-24 shrink-0 font-medium text-amber-700">
+                <span className="w-24 shrink-0 font-medium text-yellow-700">
                   {[ing.amount, ing.unit].filter(Boolean).join(" ")}
                 </span>
-                <span className="text-amber-900">{ing.name}</span>
+                <span className="text-yellow-900">{ing.name}</span>
               </li>
             ))}
           </ul>
@@ -196,14 +228,14 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
       {instructions.length > 0 && (
         <section className="mb-8">
-          <h2 className="mb-3 text-xl font-semibold text-amber-900">Instructions</h2>
+          <h2 className="mb-3 text-xl font-semibold text-yellow-900">Instructions</h2>
           <ol className="space-y-4">
             {instructions.map((step, i) => (
               <li key={i} className="flex gap-4">
-                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-amber-600 text-sm font-bold text-white">
+                <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-600 text-sm font-bold text-white">
                   {i + 1}
                 </span>
-                <p className="pt-1 text-sm leading-relaxed text-amber-900">{step}</p>
+                <p className="pt-1 text-sm leading-relaxed text-yellow-900">{step}</p>
               </li>
             ))}
           </ol>
@@ -212,11 +244,11 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
       {recipe.notes && (
         <section className="mb-8">
-          <h2 className="mb-3 text-xl font-semibold text-amber-900">Notes</h2>
+          <h2 className="mb-3 text-xl font-semibold text-yellow-900">Notes</h2>
           <div
-            className="rounded-2xl border border-amber-100 bg-white px-6 py-5 text-sm text-amber-900 leading-relaxed
-              [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-amber-900 [&_h2]:mt-3 [&_h2]:mb-1
-              [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-amber-900 [&_h3]:mt-2 [&_h3]:mb-1
+            className="rounded-2xl border border-yellow-100 bg-white px-6 py-5 text-sm text-yellow-900 leading-relaxed
+              [&_h2]:text-lg [&_h2]:font-semibold [&_h2]:text-yellow-900 [&_h2]:mt-3 [&_h2]:mb-1
+              [&_h3]:text-base [&_h3]:font-semibold [&_h3]:text-yellow-900 [&_h3]:mt-2 [&_h3]:mb-1
               [&_ul]:list-disc [&_ul]:pl-5 [&_ul]:my-1
               [&_ol]:list-decimal [&_ol]:pl-5 [&_ol]:my-1
               [&_li]:my-0.5
@@ -224,7 +256,7 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
               [&_strong]:font-semibold
               [&_em]:italic
               [&_s]:line-through
-              [&_blockquote]:border-l-4 [&_blockquote]:border-amber-300 [&_blockquote]:pl-3 [&_blockquote]:text-amber-700"
+              [&_blockquote]:border-l-4 [&_blockquote]:border-yellow-300 [&_blockquote]:pl-3 [&_blockquote]:text-yellow-700"
             dangerouslySetInnerHTML={{ __html: recipe.notes }}
           />
         </section>
@@ -232,67 +264,67 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
       {trackedIngredients.length > 0 && (
         <section className="mb-8">
-          <div className="border-2 border-amber-200 rounded-2xl bg-white p-4 text-amber-900 max-w-xs mx-auto shadow-sm">
+          <div className="border-2 border-yellow-200 rounded-2xl bg-white p-4 text-yellow-900 max-w-xs mx-auto shadow-sm">
             {/* Header */}
-            <p className="text-4xl font-black leading-none tracking-tight text-amber-900">Nutrition Facts</p>
-            <p className="mt-1.5 text-sm text-amber-700">{servings} serving{servings !== 1 ? "s" : ""} per recipe</p>
-            <div className="mt-0.5 flex justify-between border-t border-amber-300 pt-0.5 text-sm font-bold text-amber-900">
+            <p className="text-4xl font-black leading-none tracking-tight text-yellow-900">Nutrition Facts</p>
+            <p className="mt-1.5 text-sm text-yellow-700">{servings} serving{servings !== 1 ? "s" : ""} per recipe</p>
+            <div className="mt-0.5 flex justify-between border-t border-yellow-300 pt-0.5 text-sm font-bold text-yellow-900">
               <span>Serving size</span>
               <span>1 serving</span>
             </div>
 
             {/* Calories */}
-            <div className="border-t-[8px] border-amber-800 pt-1">
-              <p className="text-xs font-medium text-amber-600">Amount per serving</p>
+            <div className="border-t-[8px] border-yellow-800 pt-1">
+              <p className="text-xs font-medium text-yellow-600">Amount per serving</p>
               <div className="flex items-end justify-between">
-                <span className="text-2xl font-black text-amber-900">Calories</span>
-                <span className="text-5xl font-black leading-none text-amber-900">{perServing.calories}</span>
+                <span className="text-2xl font-black text-yellow-900">Calories</span>
+                <span className="text-5xl font-black leading-none text-yellow-900">{perServing.calories}</span>
               </div>
             </div>
 
             {/* Nutrient rows */}
-            <div className="border-t-[4px] border-amber-700">
-              <p className="py-0.5 text-right text-xs font-bold text-amber-600">% Daily Value*</p>
+            <div className="border-t-[4px] border-yellow-700">
+              <p className="py-0.5 text-right text-xs font-bold text-yellow-600">% Daily Value*</p>
 
-              <div className="flex justify-between border-t border-amber-100 py-[3px] text-sm">
+              <div className="flex justify-between border-t border-yellow-100 py-[3px] text-sm">
                 <span><b>Total Fat</b> {perServing.fat}g</span>
                 <b>{dv(perServing.fat, 78)}%</b>
               </div>
               {hasSaturatedFat && (
-                <div className="flex justify-between border-t border-amber-100 py-[3px] pl-4 text-sm text-amber-700">
+                <div className="flex justify-between border-t border-yellow-100 py-[3px] pl-4 text-sm text-yellow-700">
                   <span>Saturated Fat {perServing.saturatedFat}g</span>
-                  <b className="text-amber-900">{dv(perServing.saturatedFat, 20)}%</b>
+                  <b className="text-yellow-900">{dv(perServing.saturatedFat, 20)}%</b>
                 </div>
               )}
               {perServing.cholesterol > 0 && (
-                <div className="flex justify-between border-t border-amber-100 py-[3px] text-sm">
+                <div className="flex justify-between border-t border-yellow-100 py-[3px] text-sm">
                   <span><b>Cholesterol</b> {Math.round(perServing.cholesterol)}mg</span>
                   <b>{dv(perServing.cholesterol, 300)}%</b>
                 </div>
               )}
               {perServing.sodium > 0 && (
-                <div className="flex justify-between border-t border-amber-100 py-[3px] text-sm">
+                <div className="flex justify-between border-t border-yellow-100 py-[3px] text-sm">
                   <span><b>Sodium</b> {Math.round(perServing.sodium)}mg</span>
                   <b>{dv(perServing.sodium, 2300)}%</b>
                 </div>
               )}
-              <div className="flex justify-between border-t border-amber-100 py-[3px] text-sm">
+              <div className="flex justify-between border-t border-yellow-100 py-[3px] text-sm">
                 <span><b>Total Carbohydrate</b> {perServing.carbs}g</span>
                 <b>{dv(perServing.carbs, 275)}%</b>
               </div>
               {perServing.fiber > 0 && (
-                <div className="flex justify-between border-t border-amber-100 py-[3px] pl-4 text-sm text-amber-700">
+                <div className="flex justify-between border-t border-yellow-100 py-[3px] pl-4 text-sm text-yellow-700">
                   <span>Dietary Fiber {perServing.fiber}g</span>
-                  <b className="text-amber-900">{dv(perServing.fiber, 28)}%</b>
+                  <b className="text-yellow-900">{dv(perServing.fiber, 28)}%</b>
                 </div>
               )}
               {hasSugar && (
-                <div className="flex justify-between border-t border-amber-100 py-[3px] pl-4 text-sm text-amber-700">
+                <div className="flex justify-between border-t border-yellow-100 py-[3px] pl-4 text-sm text-yellow-700">
                   <span>Total Sugars {perServing.sugar}g</span>
                   <span />
                 </div>
               )}
-              <div className="flex justify-between border-t border-amber-100 py-[3px] text-sm">
+              <div className="flex justify-between border-t border-yellow-100 py-[3px] text-sm">
                 <b>Protein {perServing.protein}g</b>
                 <span />
               </div>
@@ -300,39 +332,39 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
             {/* Vitamins & Minerals */}
             {(perServing.vitaminD > 0 || perServing.calcium > 0 || perServing.iron > 0 || perServing.potassium > 0 || perServing.vitaminC > 0 || perServing.vitaminA > 0) && (
-              <div className="border-t-[4px] border-amber-700">
+              <div className="border-t-[4px] border-yellow-700">
                 {perServing.vitaminD > 0 && (
-                  <div className="flex justify-between border-b border-amber-100 py-[3px] text-sm">
+                  <div className="flex justify-between border-b border-yellow-100 py-[3px] text-sm">
                     <span>Vitamin D {perServing.vitaminD}mcg</span>
                     <b>{dv(perServing.vitaminD, 20)}%</b>
                   </div>
                 )}
                 {perServing.calcium > 0 && (
-                  <div className="flex justify-between border-b border-amber-100 py-[3px] text-sm">
+                  <div className="flex justify-between border-b border-yellow-100 py-[3px] text-sm">
                     <span>Calcium {Math.round(perServing.calcium)}mg</span>
                     <b>{dv(perServing.calcium, 1300)}%</b>
                   </div>
                 )}
                 {perServing.iron > 0 && (
-                  <div className="flex justify-between border-b border-amber-100 py-[3px] text-sm">
+                  <div className="flex justify-between border-b border-yellow-100 py-[3px] text-sm">
                     <span>Iron {perServing.iron}mg</span>
                     <b>{dv(perServing.iron, 18)}%</b>
                   </div>
                 )}
                 {perServing.potassium > 0 && (
-                  <div className="flex justify-between border-b border-amber-100 py-[3px] text-sm">
+                  <div className="flex justify-between border-b border-yellow-100 py-[3px] text-sm">
                     <span>Potassium {Math.round(perServing.potassium)}mg</span>
                     <b>{dv(perServing.potassium, 4700)}%</b>
                   </div>
                 )}
                 {perServing.vitaminC > 0 && (
-                  <div className="flex justify-between border-b border-amber-100 py-[3px] text-sm">
+                  <div className="flex justify-between border-b border-yellow-100 py-[3px] text-sm">
                     <span>Vitamin C {perServing.vitaminC}mg</span>
                     <b>{dv(perServing.vitaminC, 90)}%</b>
                   </div>
                 )}
                 {perServing.vitaminA > 0 && (
-                  <div className="flex justify-between border-b border-amber-100 py-[3px] text-sm">
+                  <div className="flex justify-between border-b border-yellow-100 py-[3px] text-sm">
                     <span>Vitamin A {perServing.vitaminA}mcg</span>
                     <b>{dv(perServing.vitaminA, 900)}%</b>
                   </div>
@@ -341,10 +373,10 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
             )}
 
             {/* Footnote */}
-            <div className="mt-1 border-t border-amber-200 pt-1 text-[10px] leading-tight text-amber-500">
+            <div className="mt-1 border-t border-yellow-200 pt-1 text-[10px] leading-tight text-yellow-500">
               * The % Daily Value (DV) tells you how much a nutrient in a serving of food contributes to a daily diet. 2,000 calories a day is used for general nutrition advice.
             </div>
-            <p className="mt-1.5 text-[10px] text-amber-400">
+            <p className="mt-1.5 text-[10px] text-yellow-400">
               {trackedIngredients.length} of {ingredients.length} ingredient{ingredients.length !== 1 ? "s" : ""} tracked
             </p>
           </div>
