@@ -33,7 +33,10 @@ export async function createRecipe(formData: FormData) {
   let imageUrl: string | null = null
   const imageFile = formData.get("image") as File | null
   if (imageFile && imageFile.size > 0) {
-    const blob = await put(imageFile.name, imageFile, { access: "public" })
+    const blob = await put(imageFile.name, imageFile, {
+      access: "public",
+      token: process.env.RECIPEBLOB_READ_WRITE_TOKEN,
+    })
     imageUrl = blob.url
   }
 
