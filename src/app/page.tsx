@@ -2,6 +2,8 @@ import { prisma } from "@/lib/db"
 import Link from "next/link"
 import RecipeCard from "@/components/RecipeCard"
 
+export const dynamic = "force-dynamic"
+
 export default async function HomePage() {
   const recipes = await prisma.recipe.findMany({
     orderBy: { createdAt: "desc" },
