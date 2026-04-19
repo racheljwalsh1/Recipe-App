@@ -1,0 +1,23 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+}
+
+model Recipe {
+  id           String   @id @default(cuid())
+  title        String
+  description  String?
+  servings     Int      @default(4)
+  prepTime     Int      @default(0)
+  cookTime     Int      @default(0)
+  category     String?
+  ingredients  String
+  instructions String
+  imageUrl     String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
