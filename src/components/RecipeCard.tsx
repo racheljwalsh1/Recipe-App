@@ -52,7 +52,7 @@ export default function RecipeCard({ recipe }: { recipe: Recipe }) {
         </div>
 
         {recipe.description && (
-          <p className="mt-2 text-sm text-yellow-800/60 line-clamp-2">{recipe.description}</p>
+          <p className="mt-2 text-sm text-yellow-800/75 line-clamp-2">{recipe.description}</p>
         )}
 
         <div className="mt-4 flex flex-wrap items-center gap-2">

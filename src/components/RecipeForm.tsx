@@ -410,8 +410,8 @@ export default function RecipeForm({ action = createRecipe, initialData, submitL
           <h2 className="text-lg font-semibold text-yellow-900">Ingredients</h2>
 
           <div className="hidden sm:flex gap-2 text-xs font-medium text-yellow-700/50 pb-0.5">
-            <span className="w-20">Amount</span>
-            <span className="w-20">Unit</span>
+            <span className="w-16 sm:w-20">Amount</span>
+            <span className="w-16 sm:w-20">Unit</span>
             <span className="flex-1">Ingredient</span>
             <span className="w-5" />
           </div>
@@ -423,14 +423,14 @@ export default function RecipeForm({ action = createRecipe, initialData, submitL
                 value={ing.amount}
                 onChange={(e) => patch(i, { amount: e.target.value })}
                 placeholder="½"
-                className="w-20 rounded-lg border border-yellow-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-16 sm:w-20 rounded-lg border border-yellow-200 px-2 sm:px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               <input
                 name="ingredientUnit"
                 value={ing.unit}
                 onChange={(e) => patch(i, { unit: e.target.value })}
                 placeholder="cups"
-                className="w-20 rounded-lg border border-yellow-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
+                className="w-16 sm:w-20 rounded-lg border border-yellow-200 px-2 sm:px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-yellow-400"
               />
               <div className="relative flex-1">
                 <input

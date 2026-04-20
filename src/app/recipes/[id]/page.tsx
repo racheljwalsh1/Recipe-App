@@ -76,7 +76,7 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
   return (
     <div className="max-w-2xl mx-auto">
-      <div className="mb-6 flex items-start justify-between gap-4">
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
         <div>
           <Link href="/" className="text-sm text-yellow-600 hover:text-yellow-800">
             ← All Recipes
@@ -123,7 +123,7 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
             </div>
           )}
         </div>
-        <div className="flex shrink-0 gap-2">
+        <div className="flex gap-2 self-start sm:shrink-0">
           <Link
             href={`/recipes/${recipe.id}/edit`}
             className="rounded-full border border-yellow-200 bg-white px-4 py-2.5 text-sm font-medium text-yellow-700 hover:bg-yellow-50 transition-colors"
@@ -150,7 +150,7 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
       </div>
 
       {recipe.imageUrl && (
-        <div className="relative mb-8 h-72 w-full overflow-hidden rounded-2xl">
+        <div className="relative mb-8 h-52 sm:h-72 w-full overflow-hidden rounded-2xl">
           <Image
             src={recipe.imageUrl}
             alt={recipe.title}
@@ -168,29 +168,29 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
       <div className="mb-8 space-y-3">
         {/* Key stat cards */}
-        <div className="grid grid-cols-3 gap-3">
-          <div className="rounded-2xl border border-yellow-200 bg-white px-4 py-4 text-center shadow-sm">
-            <div className="text-3xl font-bold text-yellow-900">{recipe.servings}</div>
+        <div className="grid grid-cols-3 gap-2 sm:gap-3">
+          <div className="rounded-2xl border border-yellow-200 bg-white px-2 py-3 sm:px-4 sm:py-4 text-center shadow-sm">
+            <div className="text-2xl sm:text-3xl font-bold text-yellow-900">{recipe.servings}</div>
             <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Servings</div>
           </div>
           {perServing.calories > 0 ? (
-            <div className="rounded-2xl border border-yellow-200 bg-white px-4 py-4 text-center shadow-sm">
-              <div className="text-3xl font-bold text-yellow-900">{perServing.calories}</div>
-              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Cal / Serving</div>
+            <div className="rounded-2xl border border-yellow-200 bg-white px-2 py-3 sm:px-4 sm:py-4 text-center shadow-sm">
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-900">{perServing.calories} cal</div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Per Serving</div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-yellow-200 bg-yellow-50/50 px-4 py-4 text-center">
+            <div className="rounded-2xl border border-dashed border-yellow-200 bg-yellow-50/50 px-2 py-3 sm:px-4 sm:py-4 text-center">
               <div className="text-sm text-yellow-300">—</div>
               <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-300">Cal / Serving</div>
             </div>
           )}
           {perServing.protein > 0 ? (
-            <div className="rounded-2xl border border-yellow-200 bg-white px-4 py-4 text-center shadow-sm">
-              <div className="text-3xl font-bold text-yellow-900">{perServing.protein}<span className="text-lg font-normal text-yellow-400">g</span></div>
-              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Protein / Serving</div>
+            <div className="rounded-2xl border border-yellow-200 bg-white px-2 py-3 sm:px-4 sm:py-4 text-center shadow-sm">
+              <div className="text-2xl sm:text-3xl font-bold text-yellow-900">{perServing.protein} g</div>
+              <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-400">Protein</div>
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-yellow-200 bg-yellow-50/50 px-4 py-4 text-center">
+            <div className="rounded-2xl border border-dashed border-yellow-200 bg-yellow-50/50 px-2 py-3 sm:px-4 sm:py-4 text-center">
               <div className="text-sm text-yellow-300">—</div>
               <div className="mt-1 text-xs font-medium uppercase tracking-wide text-yellow-300">Protein / Serving</div>
             </div>
@@ -198,7 +198,7 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
         </div>
         {/* Time info */}
         {totalTime > 0 && (
-          <div className="flex gap-6 rounded-2xl bg-yellow-50 px-6 py-3 text-sm text-yellow-800">
+          <div className="flex flex-wrap gap-x-4 gap-y-1 rounded-2xl bg-yellow-50 px-4 sm:px-6 py-3 text-sm text-yellow-800">
             {recipe.prepTime > 0 && (
               <div><span className="font-semibold">Prep</span> {recipe.prepTime} min</div>
             )}
@@ -215,8 +215,8 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
           <h2 className="mb-3 text-xl font-semibold text-yellow-900">Ingredients</h2>
           <ul className="space-y-2 rounded-2xl border border-yellow-100 bg-white p-5">
             {ingredients.map((ing, i) => (
-              <li key={i} className="flex gap-3 text-sm">
-                <span className="w-24 shrink-0 font-medium text-yellow-700">
+              <li key={i} className="flex gap-3 text-base">
+                <span className="w-16 sm:w-24 shrink-0 font-medium text-yellow-700">
                   {[ing.amount, ing.unit].filter(Boolean).join(" ")}
                 </span>
                 <span className="text-yellow-900">{ing.name}</span>
@@ -235,7 +235,7 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
                 <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-yellow-600 text-sm font-bold text-white">
                   {i + 1}
                 </span>
-                <p className="pt-1 text-sm leading-relaxed text-yellow-900">{step}</p>
+                <p className="pt-1 text-base leading-relaxed text-yellow-900">{step}</p>
               </li>
             ))}
           </ol>
@@ -264,7 +264,7 @@ export default async function RecipePage(props: PageProps<"/recipes/[id]">) {
 
       {trackedIngredients.length > 0 && (
         <section className="mb-8">
-          <div className="border-2 border-yellow-200 rounded-2xl bg-white p-4 text-yellow-900 max-w-xs mx-auto shadow-sm">
+          <div className="border-2 border-yellow-200 rounded-2xl bg-white p-4 text-yellow-900 w-full sm:max-w-xs sm:mx-auto shadow-sm">
             {/* Header */}
             <p className="text-4xl font-black leading-none tracking-tight text-yellow-900">Nutrition Facts</p>
             <p className="mt-1.5 text-sm text-yellow-700">{servings} serving{servings !== 1 ? "s" : ""} per recipe</p>

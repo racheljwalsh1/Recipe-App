@@ -33,6 +33,7 @@ export default function RecipeFilters({ authors, totalCount, filteredCount }: Re
   const [qInput, setQInput] = useState(currentQ)
   const [ingredientTags, setIngredientTags] = useState<string[]>(currentIngredients)
   const [ingredientText, setIngredientText] = useState("")
+  const [filtersOpen, setFiltersOpen] = useState(false)
 
   // Sync text inputs when URL changes externally (back/forward)
   useEffect(() => { setQInput(currentQ) }, [currentQ])
@@ -91,6 +92,8 @@ export default function RecipeFilters({ authors, totalCount, filteredCount }: Re
     currentQ || currentIngredients.length > 0 || currentCategory || currentAuthor ||
     currentHp || currentLc || currentMinRating
 
+  const activeSecondaryCount = [currentCategory, currentAuthor, currentRatingBy, currentHp, currentLc].filter(Boolean).length
+
   function clearAll() {
     setQInput("")
     setIngredientTags([])
@@ -133,7 +136,31 @@ export default function RecipeFilters({ authors, totalCount, filteredCount }: Re
         </div>
       </div>
 
-      <div className="flex flex-wrap items-center gap-2">
+      {/* Mobile toggle */}
+      <div className="flex items-center gap-2 sm:hidden">
+        <button
+          onClick={() => setFiltersOpen(!filtersOpen)}
+          className="flex items-center gap-1.5 rounded-xl border border-amber-200 bg-white px-3 py-2 text-sm text-amber-800 hover:bg-amber-50 transition-colors"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="4" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="16" y2="12"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+          Filters
+          {activeSecondaryCount > 0 && (
+            <span className="flex h-4 w-4 items-center justify-center rounded-full bg-amber-500 text-[10px] font-bold text-white">
+              {activeSecondaryCount}
+            </span>
+          )}
+        </button>
+        {hasFilters && (
+          <button
+            onClick={clearAll}
+            className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-100 transition-colors"
+          >
+            Clear
+          </button>
+        )}
+      </div>
+
+      <div className={`flex-wrap items-center gap-2 ${filtersOpen ? "flex" : "hidden"} sm:flex`}>
         <select
           value={currentCategory}
           onChange={(e) => navigate({ category: e.target.value || null })}
@@ -209,7 +236,7 @@ export default function RecipeFilters({ authors, totalCount, filteredCount }: Re
         {hasFilters && (
           <button
             onClick={clearAll}
-            className="rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-100 transition-colors"
+            className="hidden sm:block rounded-xl border border-red-100 bg-red-50 px-3 py-2 text-sm font-medium text-red-500 hover:bg-red-100 transition-colors"
           >
             Clear filters
           </button>

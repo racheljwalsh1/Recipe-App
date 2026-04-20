@@ -22,9 +22,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </Link>
             <Link
               href="/recipes/new"
-              className="rounded-full bg-amber-600 px-4 py-2 text-sm font-medium text-white hover:bg-amber-700 transition-colors"
+              className="rounded-full bg-amber-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-amber-700 transition-colors"
             >
-              + New Recipe
+              <span className="hidden sm:inline">+ New Recipe</span>
+              <span className="sm:hidden">+</span>
             </Link>
           </div>
         </header>

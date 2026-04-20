@@ -199,9 +199,9 @@ export default function NutritionModal({ ingredients, onSave, onClose }: Props) 
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-12 overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-start justify-center bg-black/40 p-4 pt-6 sm:pt-12 overflow-y-auto">
       <div className="w-full max-w-2xl rounded-2xl bg-white shadow-xl">
-        <div className="flex items-center justify-between border-b border-yellow-100 px-6 py-4">
+        <div className="flex items-center justify-between border-b border-yellow-100 px-4 sm:px-6 py-4">
           <div>
             <h2 className="text-lg font-semibold text-yellow-900">Nutrition Lookup</h2>
             <p className="text-xs text-yellow-500/70 mt-0.5">
@@ -217,7 +217,7 @@ export default function NutritionModal({ ingredients, onSave, onClose }: Props) 
           </button>
         </div>
 
-        <div className="divide-y divide-yellow-50 px-6">
+        <div className="divide-y divide-yellow-50 px-4 sm:px-6">
           {rows.map((row, i) => (
             <div key={i} className="py-4 space-y-2">
               <p className="text-sm font-medium text-yellow-900">
@@ -314,7 +314,7 @@ export default function NutritionModal({ ingredients, onSave, onClose }: Props) 
           ))}
         </div>
 
-        <div className="flex justify-end gap-3 border-t border-yellow-100 px-6 py-4">
+        <div className="flex justify-end gap-3 border-t border-yellow-100 px-4 sm:px-6 py-4">
           <button
             type="button"
             onClick={onClose}
