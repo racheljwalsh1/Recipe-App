@@ -21,12 +21,36 @@ type Recipe = {
 export default function RecipePDFButton({ recipe }: { recipe: Recipe }) {
   const [loading, setLoading] = useState(false)
 
+  async function toJpegDataUrl(src: string): Promise<string | null> {
+    try {
+      const res = await fetch(src)
+      const srcBlob = await res.blob()
+      const blobUrl = URL.createObjectURL(srcBlob)
+      return await new Promise((resolve) => {
+        const img = new window.Image()
+        img.onload = () => {
+          const canvas = document.createElement("canvas")
+          canvas.width = img.naturalWidth
+          canvas.height = img.naturalHeight
+          canvas.getContext("2d")!.drawImage(img, 0, 0)
+          URL.revokeObjectURL(blobUrl)
+          resolve(canvas.toDataURL("image/jpeg", 0.92))
+        }
+        img.onerror = () => { URL.revokeObjectURL(blobUrl); resolve(null) }
+        img.src = blobUrl
+      })
+    } catch {
+      return null
+    }
+  }
+
   async function handleDownload() {
     setLoading(true)
     try {
       const { pdf } = await import("@react-pdf/renderer")
       const { RecipePDFDocument } = await import("./RecipePDFDocument")
-      const blob = await pdf(<RecipePDFDocument recipe={recipe} />).toBlob()
+      const imageUrl = recipe.imageUrl ? await toJpegDataUrl(recipe.imageUrl) : null
+      const blob = await pdf(<RecipePDFDocument recipe={{ ...recipe, imageUrl }} />).toBlob()
       const url = URL.createObjectURL(blob)
       const a = document.createElement("a")
       a.href = url

@@ -63,6 +63,7 @@ export default function RecipeForm({ action = createRecipe, initialData, submitL
   )
   const [imagePreview, setImagePreview] = useState<string | null>(null)
   const [existingImageUrl, setExistingImageUrl] = useState<string | null>(initialData?.imageUrl ?? null)
+  const [imageError, setImageError] = useState<string | null>(null)
   const [notes, setNotes] = useState<string>(initialData?.notes ?? "")
   const [isPending, startTransition] = useTransition()
 
@@ -82,14 +83,25 @@ export default function RecipeForm({ action = createRecipe, initialData, submitL
 
   function handleImageChange(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = () => setImagePreview(reader.result as string)
-      reader.readAsDataURL(file)
-      setExistingImageUrl(null)
-    } else {
+    setImageError(null)
+    if (!file) {
       setImagePreview(null)
+      return
     }
+    if (!file.type.startsWith("image/")) {
+      setImageError("That file type isn't supported. Please upload a JPEG, PNG, WebP, or other image.")
+      e.target.value = ""
+      return
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      setImageError("Photo is too large (max 5 MB). Try resizing it before uploading.")
+      e.target.value = ""
+      return
+    }
+    const reader = new FileReader()
+    reader.onload = () => setImagePreview(reader.result as string)
+    reader.readAsDataURL(file)
+    setExistingImageUrl(null)
   }
 
   function removeImage() {
@@ -267,6 +279,9 @@ export default function RecipeForm({ action = createRecipe, initialData, submitL
               onChange={handleImageChange}
               className="block w-full text-sm text-yellow-800 file:mr-3 file:rounded-full file:border-0 file:bg-yellow-100 file:px-4 file:py-1.5 file:text-xs file:font-medium file:text-yellow-700 hover:file:bg-yellow-200"
             />
+            {imageError && (
+              <p className="mt-1.5 text-xs text-red-600">{imageError}</p>
+            )}
             {displayImage && (
               <div className="mt-3 relative w-full max-w-xs">
                 <img src={displayImage} alt="Preview" className="rounded-xl object-cover w-full h-48" />
